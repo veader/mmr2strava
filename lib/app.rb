@@ -6,12 +6,15 @@ require "sinatra/partial"
 require "rack-flash"
 require "omniauth"
 require "ostruct"
+require "date"
 
 require "dotenv"
 Dotenv.load
 
 # models ----
-# require "auth_user"
+require "mmr_client"
+require "mmr_user"
+require "mmr_workout"
 
 # helpers ----
 
@@ -55,7 +58,20 @@ class MMRToStravaApplication < Sinatra::Base
 
   # ---------------------------------------------------------------
   get "/" do
-    erb :index
+    redirect "/workouts"
+  end
+
+  get "/workouts" do
+    # TODO: pagination - pass dates?
+    params = { started_after: "2014-08-01T00:00:00Z" }
+    @user = MMR::User.current
+    @workouts = MMR::Workout.all(@user.user_id, params)
+    erb :workouts
+  end
+
+  get "/user" do
+    @user = MMR::User.current
+    erb :user
   end
 
 end
