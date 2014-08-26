@@ -23,7 +23,7 @@ gem "sqlite3" # technically only needed for dev
 gem "omniauth"
 gem "omniauth-google-oauth2"
 gem "omniauth-strava"
-gem "omniauth-mapmyfitness"
+gem "omniauth-mapmyfitness-oauth2"
 
 group :test do
   gem 'mocha'

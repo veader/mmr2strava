@@ -5,15 +5,14 @@ module MMR
   class Workout
     attr_accessor :json
 
-    def self.all(user_id, options={})
+    def self.all(client, user_id, options={})
       final_options = options.merge(user: user_id)
-      json_workouts = MMR::Client.instance.workouts(final_options)
+      json_workouts = client.workouts(final_options)
       json_workouts.collect { |json| new(json) }
     end
 
-    def self.find(workout_id)
-      json_workout = MMR::Client.instance.workout(workout_id: workout_id,
-                                                  field_set: "time_series")
+    def self.find(client, workout_id)
+      json_workout = client.workout(workout_id: workout_id, field_set: "time_series")
       new(json_workout)
     end
 

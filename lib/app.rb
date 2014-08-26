@@ -7,7 +7,7 @@ require "rack-flash"
 require "omniauth"
 require "omniauth-google-oauth2"
 require "omniauth-strava"
-require "omniauth-mapmyfitness"
+require "omniauth-mapmyfitness-oauth2"
 require "ostruct"
 require "date"
 
@@ -139,8 +139,7 @@ class MMRToStravaApplication < Sinatra::Base
     # TODO: date formatter helper
     @month = Date.today
     params = { started_after: @month.strftime(midnight_date_format) }
-    @user = MMR::User.current
-    @workouts = MMR::Workout.all(@user.user_id, params)
+    @workouts = MMR::Workout.all(current_user.mmr_client, current_user.mmr_user_id, params)
     erb :workouts
   end
 
@@ -150,8 +149,7 @@ class MMRToStravaApplication < Sinatra::Base
 
     params = { started_after:  month_beginning.strftime(midnight_date_format),
                started_before: month_ending.strftime(midnight_date_format) }
-    @user = MMR::User.current
-    @workouts = MMR::Workout.all(@user.user_id, params)
+    @workouts = MMR::Workout.all(current_user.mmr_client, current_user.user_id, params)
     @month = month_beginning
     erb :workouts
   end
@@ -160,7 +158,7 @@ class MMRToStravaApplication < Sinatra::Base
     content_type "text/xml"
 
     @user = MMR::User.current
-    @workout = MMR::Workout.find(params[:workout_id])
+    @workout = MMR::Workout.find(current_user.mmr_client, params[:workout_id])
     @workout.gpx_builder.to_xml
   end
 

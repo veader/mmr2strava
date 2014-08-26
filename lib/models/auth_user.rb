@@ -1,3 +1,5 @@
+require "mmr_client"
+
 class AuthUser < ActiveRecord::Base
   validates_presence_of :email
   validates_format_of :email, with: /shawn\@veader\.org/, message: "You're not the right person!"
@@ -27,6 +29,10 @@ class AuthUser < ActiveRecord::Base
 
   def needs_access_grants?
     !has_mmr_access? || !has_strava_access?
+  end
+
+  def mmr_client
+    @_mmr_client ||= MMR::Client.instance(self)
   end
 
 end
