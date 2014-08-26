@@ -61,6 +61,14 @@ GEM
     omniauth (1.2.2)
       hashie (>= 1.2, < 4)
       rack (~> 1.0)
+    omniauth-google-oauth2 (0.2.5)
+      omniauth (> 1.0)
+      omniauth-oauth2 (~> 1.1)
+    omniauth-oauth2 (1.2.0)
+      faraday (>= 0.8, < 0.10)
+      multi_json (~> 1.3)
+      oauth2 (~> 1.0)
+      omniauth (~> 1.2)
     rack (1.5.2)
     rack-flash3 (1.0.5)
       rack
@@ -112,6 +120,7 @@ DEPENDENCIES
   mocha
   nokogiri
   omniauth
+  omniauth-google-oauth2
   rack
   rack-flash3
   rack-test
