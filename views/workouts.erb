@@ -46,9 +46,9 @@
               <td><%= display_time workout.json["aggregates"]["elapsed_time_total"] %></td>
               <td>
                 <% if workout.has_heartrate_data? %>
-                  <i class="fa fa-heart text-red" title="has heartrate data"></i>
+                  <i class="fa fa-heart text-danger" title="has heartrate data"></i>
                 <% else %>
-                  <i class="fa fa-heart-o text-gray" title="no heartrate data"></i>
+                  <i class="fa fa-heart-o text-muted" title="no heartrate data"></i>
                 <% end  %>
               </td>
             </tr>

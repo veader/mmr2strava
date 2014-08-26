@@ -6,6 +6,8 @@ require "sinatra/partial"
 require "rack-flash"
 require "omniauth"
 require "omniauth-google-oauth2"
+require "omniauth-strava"
+require "omniauth-mapmyfitness"
 require "ostruct"
 require "date"
 
@@ -23,6 +25,8 @@ require "app_env"
 require "helpers"
 require "authentication"
 require "get_or_post"
+require "mapmyfitness"
+require "strava"
 
 # Time.zone = "UTC"
 ActiveRecord::Base.default_timezone = :utc
@@ -57,6 +61,11 @@ class MMRToStravaApplication < Sinatra::Base
 
   if is_development?
     use OmniAuth::Strategies::Developer
+    use OmniAuth::Builder do
+      provider :developer
+      provider :strava, ENV["STRAVA_CLIENT_ID"], ENV["STRAVA_CLIENT_SECRET"]
+      provider :mapmyfitness, ENV["MMR_CLIENT_KEY"], ENV["MMR_CLIENT_SECRET"]
+    end
   else
     OmniAuth.config.full_host = ENV["FULL_DOMAIN"] if is_production?
 
@@ -64,7 +73,8 @@ class MMRToStravaApplication < Sinatra::Base
     use OmniAuth::Builder do
       provider :google_oauth2, ENV["GOOGLE_CLIENT_ID"], ENV["GOOGLE_SECRET"],
                { name: "google", access_type: "online" }
-      # prompt: "consent" # <-- add to hash to "force" reset
+      provider :strava, ENV["STRAVA_CLIENT_ID"], ENV["STRAVA_CLIENT_SECRET"]
+      provider :mapmyfitness, ENV["MMR_CLIENT_KEY"], ENV["MMR_CLIENT_SECRET"]
     end
     OmniAuth.config.logger = Logger.new("log/omniauth.log")
   end
@@ -72,11 +82,14 @@ class MMRToStravaApplication < Sinatra::Base
   # ---------------------------------------------------------------
   helpers do
     include MMRToStrava::Helpers
+    include MMRToStrava::MapMyFitness
+    include MMRToStrava::Strava
   end
 
   # ---------------------------------------------------------------
   before do
     authentication_required!
+    oauth_access_required! # need to have MMR and Strava access
   end
 
   # ---------------------------------------------------------------
@@ -94,7 +107,14 @@ class MMRToStravaApplication < Sinatra::Base
   end
 
   get_or_post "/auth/:name/callback" do
-    handle_oauth_callback
+    case params[:name]
+    when "strava"
+      handle_strava_oauth
+    when "mapmyfitness"
+      handle_mapmyfitness_oauth
+    else
+      handle_oauth_callback
+    end
   end
 
   get_or_post "/auth/failure" do
@@ -106,8 +126,11 @@ class MMRToStravaApplication < Sinatra::Base
 
   # ---------------------------------------------------------------
   get "/user" do
-    @user = MMR::User.current
     erb :user
+  end
+
+  get "/access" do
+    erb :access
   end
 
   # ---------------------------------------------------------------

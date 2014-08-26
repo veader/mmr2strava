@@ -8,7 +8,16 @@ module MMRToStrava
         session[:user_id] ? AuthUser.where(id: session[:user_id].to_i).first : nil
     end
 
-    def query_date_format
+    # ----------------------------------------------------------------------
+    # GENERAL
+    def oauth_access_required?
+      !request.path_info.match(%r{^/[auth|access|logout]}) && \
+      current_user && \
+      current_user.needs_access_grants?
+    end
+
+    def oauth_access_required!
+      redirect "/access" if oauth_access_required?
     end
 
     def midnight_date_format

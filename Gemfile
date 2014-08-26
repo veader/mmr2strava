@@ -22,6 +22,8 @@ gem "sqlite3" # technically only needed for dev
 # authentication ----
 gem "omniauth"
 gem "omniauth-google-oauth2"
+gem "omniauth-strava"
+gem "omniauth-mapmyfitness"
 
 group :test do
   gem 'mocha'

@@ -19,8 +19,9 @@
 </head>
 
 <body>
-    <div id="wrapper" <%= current_user ? "" : "style='padding:0;'" %>>
-        <% if current_user %>
+    <% show_nav = current_user && !current_user.needs_access_grants? %>
+    <div id="wrapper" <%= show_nav ? "" : "style='padding:0;'" %>>
+        <% if show_nav %>
             <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">

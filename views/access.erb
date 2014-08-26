@@ -1,0 +1,36 @@
+<div class="row">
+  <div class="col-md-3"></div>
+  <div class="col-md-6">
+    <div class="well">
+      <h3>Access</h3>
+      <p class="text-muted">
+        In order to view data in MapMyFitness and Strava, we need to authenticate
+        with each service. Please take a moment to do so.
+      </p>
+      <br>
+      <div class="row">
+        <div class="col-md-6 access-box text-center">
+          <h4 class="text-primary">Strava</h4>
+          <% if current_user.has_strava_access? %>
+            <h1 class="text-success"><i class="fa fa-fw fa-check-circle-o"></i></h1>
+          <% else %>
+            <a href="/auth/strava"><img src="/images/ConnectWithStrava@2x.png" style="width:171px;"></a>
+          <% end %>
+        </div>
+        <div class="col-md-6 access-box access-right text-center">
+          <h4 class="text-primary">MMF</h4>
+          <% if current_user.has_mmr_access? %>
+            <h1 class="text-success"><i class="fa fa-fw fa-check-circle-o"></i></h1>
+          <% else %>
+            <a href="/auth/mapmyfitness"><img src="/images/mmf_connect@2x.png" style="width:190px;"></a>
+          <% end %>
+        </div>
+      </div>
+      <br>
+      <p class="text-right">
+        <a href="/logout" class="text-really-muted">Logout</a>
+      </p>
+    </div>
+  </div>
+  <div class="col-md-3"></div>
+</div>

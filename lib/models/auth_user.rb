@@ -17,4 +17,16 @@ class AuthUser < ActiveRecord::Base
     find_by_omniauth(auth_hash) || create_with_omniauth(auth_hash)
   end
 
+  def has_mmr_access?
+    !self.mmr_token.blank?
+  end
+
+  def has_strava_access?
+    !self.strava_token.blank?
+  end
+
+  def needs_access_grants?
+    !has_mmr_access? || !has_strava_access?
+  end
+
 end

@@ -1,4 +1,4 @@
 #page-wrapper { min-height:720px; }
-.text-red { color:#900; }
-.text-gray { color:#AAA; }
-.login-prompt { text-align:center; }
+.text-really-muted { color:#AAA; }
+.access-box { min-height:100px; }
+.access-right { border-left: 1px solid #ABC; }
