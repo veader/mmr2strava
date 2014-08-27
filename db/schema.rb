@@ -19,7 +19,6 @@ ActiveRecord::Schema.define(version: 20140824030538) do
     t.string   "uid"
     t.string   "token"
     t.string   "mmr_token"
-    t.string   "mmr_secret"
     t.string   "mmr_user_id"
     t.string   "strava_token"
     t.string   "strava_user_id"
