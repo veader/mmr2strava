@@ -16,8 +16,13 @@ gem "capistrano", "2.15.5"
 
 # database ----
 gem "sinatra-activerecord"
-gem "sqlite3" # technically only needed for dev
-# gem "mysql2"
+group :development do
+  gem "sqlite3" # technically only needed for dev
+  # gem "mysql2"
+end
+group :production do
+  gem "pg"
+end
 
 # authentication ----
 gem "omniauth"
