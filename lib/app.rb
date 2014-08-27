@@ -98,9 +98,6 @@ class MMRToStravaApplication < Sinatra::Base
   end
 
   get "/login" do
-    %w[GOOGLE_CLIENT_ID GOOGLE_SECRET STRAVA_CLIENT_ID STRAVA_CLIENT_SECRET MMR_CLIENT_KEY MMR_CLIENT_SECRET].each do |e|
-      puts "#{e}: #{ENV[e]}"
-    end
     erb :login
   end
 
