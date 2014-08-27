@@ -35,4 +35,10 @@ class AuthUser < ActiveRecord::Base
     @_mmr_client ||= MMR::Client.create(self.mmr_token)
   end
 
+  def gather_mmr_user_id
+    if self.mmr_user_id.blank?
+      update_attribute(:mmr_user_id, self.mmr_client.me["id"])
+    end
+  end
+
 end
