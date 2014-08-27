@@ -58,25 +58,18 @@ class MMRToStravaApplication < Sinatra::Base
                                 secret: ENV["SESSION_SECRET"],
                               }
 
-  if is_development?
-    # use OmniAuth::Strategies::Developer
-    use OmniAuth::Builder do
+  # keys found here: https://cloud.google.com/console
+  use OmniAuth::Builder do
+    if ENV["RACK_ENV"] == "development"
       provider :developer
-      provider :strava, ENV["STRAVA_CLIENT_ID"], ENV["STRAVA_CLIENT_SECRET"]
-      provider :mapmyfitness, ENV["MMF_API_KEY"], ENV["MMF_API_SECRET"]
-    end
-  else
-    # OmniAuth.config.full_host = ENV["FULL_DOMAIN"] if is_production?
-
-    # keys found here: https://cloud.google.com/console
-    use OmniAuth::Builder do
+    else
       provider :google_oauth2, ENV["GOOGLE_CLIENT_ID"], ENV["GOOGLE_SECRET"],
                { name: "google", access_type: "online" }
-      provider :strava, ENV["STRAVA_CLIENT_ID"], ENV["STRAVA_CLIENT_SECRET"]
-      provider :mapmyfitness, ENV["MMR_CLIENT_KEY"], ENV["MMR_CLIENT_SECRET"]
     end
-    # OmniAuth.config.logger = Logger.new("log/omniauth.log")
+    provider :strava, ENV["STRAVA_CLIENT_ID"], ENV["STRAVA_CLIENT_SECRET"]
+    provider :mapmyfitness, ENV["MMF_API_KEY"], ENV["MMF_API_SECRET"]
   end
+  # OmniAuth.config.logger = Logger.new("log/omniauth.log")
 
   # ---------------------------------------------------------------
   helpers do
