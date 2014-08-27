@@ -36,6 +36,8 @@ end
 group :production do
   # database ----
   gem "pg"
+  # webserver ----
+  gem "unicorn"
 end
 
 group :test do
