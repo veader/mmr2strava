@@ -3,7 +3,7 @@
 require "sinatra"
 require "sinatra/activerecord"
 require "sinatra/partial"
-require "rack-flash"
+require "sinatra/flash"
 require "omniauth"
 require "omniauth-google-oauth2"
 require "omniauth-strava"
@@ -39,6 +39,7 @@ class MMRToStravaApplication < Sinatra::Base
 
   register Sinatra::ActiveRecordExtension
   register Sinatra::Partial
+  register Sinatra::Flash
   register Sinatra::GetOrPost
 
   set :root, ENV["MAIN_DIR"]
@@ -56,8 +57,6 @@ class MMRToStravaApplication < Sinatra::Base
                                 expire_after: 2592000,
                                 secret: ENV["SESSION_SECRET"],
                               }
-
-  use Rack::Flash, :sweep => true
 
   if is_development?
     # use OmniAuth::Strategies::Developer
@@ -90,6 +89,10 @@ class MMRToStravaApplication < Sinatra::Base
   before do
     authentication_required!
     oauth_access_required! # need to have MMR and Strava access
+  end
+
+  after do
+    flash.sweep
   end
 
   # ---------------------------------------------------------------

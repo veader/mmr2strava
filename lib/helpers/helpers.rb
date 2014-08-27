@@ -37,5 +37,14 @@ module MMRToStrava
       output
     end
 
+    def class_for_flash(level)
+      { error:   "alert-danger",
+        warning: "alert-warning",
+        notice:  "alert-info",
+        info:    "alert-info",
+        success: "alert-success",
+      }[level]
+    end
+
   end
 end

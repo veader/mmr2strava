@@ -6,7 +6,7 @@ gem "rake"
 # web ----
 gem "rack"
 gem "sinatra"
-gem "rack-flash3"
+gem "sinatra-flash"
 gem "sinatra-partial"
 gem "json"
 gem "sinatra-activerecord"

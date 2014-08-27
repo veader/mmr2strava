@@ -37,11 +37,14 @@ module MMRToStrava
         #   else
         #     root_url
         #   end
+        puts "AUTH: Success (#{user.id})"
 
         redirect "/"
       else
         session[:user_id] = nil
         error_str = "Unable to authenticate.\n" + user.errors.full_messages.join("\n")
+        puts "AUTH: Error"
+        puts error_str
 
         flash[:error] = error_str
         redirect "/login"
