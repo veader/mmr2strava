@@ -63,7 +63,7 @@ class MMRToStravaApplication < Sinatra::Base
     use OmniAuth::Builder do
       provider :developer
       provider :strava, ENV["STRAVA_CLIENT_ID"], ENV["STRAVA_CLIENT_SECRET"]
-      provider :mapmyfitness, ENV["MMR_CLIENT_KEY"], ENV["MMR_CLIENT_SECRET"]
+      provider :mapmyfitness, ENV["MMF_API_KEY"], ENV["MMF_API_SECRET"]
     end
   else
     # OmniAuth.config.full_host = ENV["FULL_DOMAIN"] if is_production?
