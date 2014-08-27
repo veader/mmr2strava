@@ -60,7 +60,6 @@ class MMRToStravaApplication < Sinatra::Base
   use Rack::Flash, :sweep => true
 
   if is_development?
-    puts "DEVELOPMENT: OmniAuth"
     # use OmniAuth::Strategies::Developer
     use OmniAuth::Builder do
       provider :developer
@@ -68,11 +67,7 @@ class MMRToStravaApplication < Sinatra::Base
       provider :mapmyfitness, ENV["MMR_CLIENT_KEY"], ENV["MMR_CLIENT_SECRET"]
     end
   else
-    puts "PRODUCTION: OmniAuth"
     # OmniAuth.config.full_host = ENV["FULL_DOMAIN"] if is_production?
-    %w[GOOGLE_CLIENT_ID GOOGLE_SECRET STRAVA_CLIENT_ID STRAVA_CLIENT_SECRET MMR_CLIENT_KEY MMR_CLIENT_SECRET].each do |e|
-      puts "#{e}: #{ENV[e]}"
-    end
 
     # keys found here: https://cloud.google.com/console
     use OmniAuth::Builder do
@@ -103,6 +98,9 @@ class MMRToStravaApplication < Sinatra::Base
   end
 
   get "/login" do
+    %w[GOOGLE_CLIENT_ID GOOGLE_SECRET STRAVA_CLIENT_ID STRAVA_CLIENT_SECRET MMR_CLIENT_KEY MMR_CLIENT_SECRET].each do |e|
+      puts "#{e}: #{ENV[e]}"
+    end
     erb :login
   end
 
