@@ -76,7 +76,7 @@ class MMRToStravaApplication < Sinatra::Base
       provider :strava, ENV["STRAVA_CLIENT_ID"], ENV["STRAVA_CLIENT_SECRET"]
       provider :mapmyfitness, ENV["MMR_CLIENT_KEY"], ENV["MMR_CLIENT_SECRET"]
     end
-    OmniAuth.config.logger = Logger.new("log/omniauth.log")
+    # OmniAuth.config.logger = Logger.new("log/omniauth.log")
   end
 
   # ---------------------------------------------------------------
