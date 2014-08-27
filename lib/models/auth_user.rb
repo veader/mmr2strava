@@ -32,7 +32,7 @@ class AuthUser < ActiveRecord::Base
   end
 
   def mmr_client
-    @_mmr_client ||= MMR::Client.new(self.mmr_token)
+    @_mmr_client ||= MMR::Client.create(self.mmr_token)
   end
 
 end
