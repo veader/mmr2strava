@@ -1,5 +1,8 @@
 #!/usr/bin/env ruby
 
+require "dotenv"
+Dotenv.load
+
 require "sinatra"
 require "sinatra/activerecord"
 require "sinatra/partial"
@@ -10,9 +13,6 @@ require "omniauth-strava"
 require "omniauth-mapmyfitness-oauth2"
 require "ostruct"
 require "date"
-
-require "dotenv"
-Dotenv.load
 
 # models ----
 require "mmr_client"
