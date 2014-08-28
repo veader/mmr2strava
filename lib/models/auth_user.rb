@@ -40,6 +40,10 @@ class AuthUser < ActiveRecord::Base
       end
   end
 
+  def mmr_user
+    @_mmr_user ||= MMR::User.new(self.mmr_client.me)
+  end
+
   def gather_mmr_user_id
     if self.mmr_user_id.blank?
       update_attribute(:mmr_user_id, self.mmr_client.me["id"])

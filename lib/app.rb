@@ -152,7 +152,7 @@ class MMRToStravaApplication < Sinatra::Base
   get "/workout/:workout_id/download" do
     content_type "text/xml"
 
-    @user = MMR::User.current
+    @user = current_user.mmr_user
     @workout = MMR::Workout.find(current_user.mmr_client, params[:workout_id])
     @workout.gpx_builder.to_xml
   end
