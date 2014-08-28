@@ -15,10 +15,9 @@ require "ostruct"
 require "date"
 
 # models ----
-require "mmr_client"
+require "auth_user"
 require "mmr_user"
 require "mmr_workout"
-require "auth_user"
 
 # helpers ----
 require "app_env"

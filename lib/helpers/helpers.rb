@@ -11,7 +11,8 @@ module MMRToStrava
     # ----------------------------------------------------------------------
     # GENERAL
     def oauth_access_required?
-      !request.path_info.match(%r{^/[auth|access|logout]}) && \
+      # http://rubular.com/r/v4vJ6eN351
+      !request.path_info.match(%r{^/(auth|access|logout)}) && \
       current_user && \
       current_user.needs_access_grants?
     end

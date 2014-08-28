@@ -1,5 +1,3 @@
-require "mmr_client"
-
 module MMR
   class User
     def self.current

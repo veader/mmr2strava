@@ -1,4 +1,3 @@
-require "mmr_client"
 require "nokogiri"
 
 module MMR

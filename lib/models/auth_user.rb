@@ -1,4 +1,4 @@
-require "mmr_client"
+require "mmf"
 
 class AuthUser < ActiveRecord::Base
   validates_presence_of :email
@@ -32,7 +32,12 @@ class AuthUser < ActiveRecord::Base
   end
 
   def mmr_client
-    @_mmr_client ||= MMR::Client.create(self.mmr_token)
+    @_mmr_client ||= \
+      Mmf::Client.new do |config|
+        config.client_key    = ENV["MMF_API_KEY"]
+        config.client_secret = ENV["MMF_API_SECRET"]
+        config.access_token  = self.mmr_token
+      end
   end
 
   def gather_mmr_user_id

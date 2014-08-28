@@ -41,7 +41,7 @@ group :production do
 end
 
 group :test do
-  gem 'mocha'
+  gem "mocha"
   gem "simplecov", "~> 0.7.1"
   gem "rack-test"
 end
