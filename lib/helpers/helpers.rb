@@ -9,6 +9,12 @@ module MMRToStrava
     end
 
     # ----------------------------------------------------------------------
+    # PATH HELPERS
+    def workouts_path_for_month(month)
+      "/workouts/#{month.year}/#{month.month}"
+    end
+
+    # ----------------------------------------------------------------------
     # GENERAL
     def oauth_access_required?
       # http://rubular.com/r/v4vJ6eN351

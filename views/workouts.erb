@@ -4,14 +4,12 @@
       Workouts
     </h1>
     <ol class="breadcrumb">
-      <li class="active">
-        <i class="fa fa-dashboard"></i>  <a href="index.html">Workouts</a>
+      <li>
+        <i class="fa fa-dashboard"></i>  <a href="/workouts">Workouts</a>
       </li>
-      <!--
       <li class="active">
-        <i class="fa fa-table"></i> Tables
+        <i class="fa fa-calendar"></i> <%= @month.strftime("%B") %>
       </li>
-      -->
     </ol>
   </div>
 </div>
@@ -21,40 +19,65 @@
     <h4>
       <%= @month.strftime("%B, %Y") %>
     </h4>
+    <ul class="pagination pagination-sm">
+      <% prev_month = @month.prev_month
+         next_month = @month.next_month
+      %>
+      <li>
+        <a href="<%= workouts_path_for_month(prev_month) %>">
+          <i class="fa fa-chevron-left"></i>
+          <%= prev_month.strftime("%B") %>
+        </a>
+      </li>
+      <li class="disabled"><a href="#"><%= @month.strftime("%B") %></a></li>
+      <li>
+        <a href="<%= workouts_path_for_month(next_month) %>">
+          <%= next_month.strftime("%B") %>
+          <i class="fa fa-chevron-right"></i>
+        </a>
+      </li>
+    </ul>
 
-    <div class="table-responsive">
-      <table class="table table-bordered table-hover table-striped">
-        <thead>
-          <tr>
-            <th></th>
-            <th>Name</th>
-            <th>Date</th>
-            <th>Distance</th>
-            <th>Time</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @workouts.each_with_index do |workout, index| %>
+    <% if @workouts.empty? %>
+      <p>
+        <strong>Sorry, </strong>
+        no workouts were found for <%= @month.strftime("%B") %>.
+      </p>
+    <% else %>
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover table-striped">
+          <thead>
             <tr>
-              <td>
-                <a href="/workout/<%= workout.workout_id %>/download" title="download GPX file"><i class="fa fa-cloud-download"></i></a>
-              </td>
-              <td><%= workout.json["name"] %></td>
-              <td><%= DateTime.parse(workout.json["start_datetime"]).strftime("%b %d, %l:%M %P") %></td>
-              <td><%= display_in_miles workout.json["aggregates"]["distance_total"] %> miles</td>
-              <td><%= display_time workout.json["aggregates"]["elapsed_time_total"] %></td>
-              <td>
-                <% if workout.has_heartrate_data? %>
-                  <i class="fa fa-heart text-danger" title="has heartrate data"></i>
-                <% else %>
-                  <i class="fa fa-heart-o text-muted" title="no heartrate data"></i>
-                <% end  %>
-              </td>
+              <th></th>
+              <th>Name</th>
+              <th>Date</th>
+              <th>Distance</th>
+              <th>Time</th>
+              <th></th>
             </tr>
-          <% end %>
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            <% @workouts.each_with_index do |workout, index| %>
+              <tr>
+                <td>
+                  <a href="/workout/<%= workout.workout_id %>/download" title="download GPX file"><i class="fa fa-cloud-download"></i></a>
+                </td>
+                <td><%= workout.json["name"] %></td>
+                <td><%= DateTime.parse(workout.json["start_datetime"]).strftime("%b %d, %l:%M %P") %></td>
+                <td><%= display_in_miles workout.json["aggregates"]["distance_total"] %> miles</td>
+                <td><%= display_time workout.json["aggregates"]["elapsed_time_total"] %></td>
+                <td>
+                  <% if workout.has_heartrate_data? %>
+                    <i class="fa fa-heart text-danger" title="has heartrate data"></i>
+                  <% else %>
+                    <i class="fa fa-heart-o text-muted" title="no heartrate data"></i>
+                  <% end  %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% end %>
     </div>
 
   </div>

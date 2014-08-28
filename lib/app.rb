@@ -144,7 +144,7 @@ class MMRToStravaApplication < Sinatra::Base
 
     params = { started_after:  month_beginning.strftime(midnight_date_format),
                started_before: month_ending.strftime(midnight_date_format) }
-    @workouts = MMR::Workout.all(current_user.mmr_client, current_user.user_id, params)
+    @workouts = MMR::Workout.all(current_user.mmr_client, current_user.mmr_user_id, params)
     @month = month_beginning
     erb :workouts
   end
