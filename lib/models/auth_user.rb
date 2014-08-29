@@ -1,4 +1,5 @@
 require "mmf"
+require "strava/api/v3"
 
 class AuthUser < ActiveRecord::Base
   validates_presence_of :email
@@ -50,6 +51,13 @@ class AuthUser < ActiveRecord::Base
     if self.mmr_user_id.blank?
       update_attribute(:mmr_user_id, self.mmr_client.me["id"])
     end
+  end
+
+  # ------------------------------------------------------------
+  # Strava
+  def strava_client
+    @_strava_client ||= \
+      Strava::Api::V3::Client.new(access_token: self.strava_token)
   end
 
 end

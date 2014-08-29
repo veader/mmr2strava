@@ -22,6 +22,7 @@ gem "omniauth-mapmyfitness-oauth2"
 gem "mmf"
 gem "dotenv"
 gem "nokogiri"
+gem "strava-api-v3"
 
 group :development do
   # database ----
