@@ -31,6 +31,8 @@ class AuthUser < ActiveRecord::Base
     !has_mmr_access? || !has_strava_access?
   end
 
+  # ------------------------------------------------------------
+  # MapMyFitness
   def mmr_client
     @_mmr_client ||= \
       Mmf::Client.new do |config|

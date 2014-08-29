@@ -32,7 +32,7 @@ module MMRToStrava
     end
 
     def display_in_miles(distance_in_meters)
-      "%0.2f" % (distance_in_meters.to_f * 0.00062137)
+      "%0.2f miles" % (distance_in_meters.to_f * 0.00062137)
     end
 
     def display_time(time_in_secs)

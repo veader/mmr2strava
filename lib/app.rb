@@ -157,4 +157,7 @@ class MMRToStravaApplication < Sinatra::Base
     @workout.gpx_builder.to_xml
   end
 
+  get "/workout/:workout_id/upload" do
+  end
+
 end

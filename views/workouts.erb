@@ -54,24 +54,28 @@
               <th>Distance</th>
               <th>Time</th>
               <th></th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
             <% @workouts.each_with_index do |workout, index| %>
               <tr>
-                <td>
-                  <a href="/workout/<%= workout.workout_id %>/download" title="download GPX file"><i class="fa fa-cloud-download"></i></a>
+                <td class="text-center">
+                  <a href="/workout/<%= workout.workout_id %>/upload" title="upload to Strava"><i class="fa fa-cloud-upload"></i></a>
                 </td>
                 <td><%= workout.json["name"] %></td>
-                <td><%= DateTime.parse(workout.json["start_datetime"]).strftime("%b %d, %l:%M %P") %></td>
-                <td><%= display_in_miles workout.json["aggregates"]["distance_total"] %> miles</td>
+                <td><%= DateTime.parse(workout.json["start_datetime"]).strftime("%B %e, %l:%M %P") %></td>
+                <td><%= display_in_miles workout.json["aggregates"]["distance_total"] %></td>
                 <td><%= display_time workout.json["aggregates"]["elapsed_time_total"] %></td>
-                <td>
+                <td class="text-center">
                   <% if workout.has_heartrate_data? %>
                     <i class="fa fa-heart text-danger" title="has heartrate data"></i>
                   <% else %>
                     <i class="fa fa-heart-o text-muted" title="no heartrate data"></i>
                   <% end  %>
+                </td>
+                <td class="text-center">
+                  <a href="/workout/<%= workout.workout_id %>/download" title="download GPX file"><i class="fa fa-download"></i></a>
                 </td>
               </tr>
             <% end %>
