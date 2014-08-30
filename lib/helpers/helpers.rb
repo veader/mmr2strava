@@ -10,8 +10,8 @@ module MMRToStrava
 
     # ----------------------------------------------------------------------
     # PATH HELPERS
-    def mmr_workouts_path_for_month(month)
-      "/mmr/workouts/#{month.year}/#{month.month}"
+    def workouts_path_for_month(site, month)
+      "/#{site}/#{site == :mmr ? 'workouts' : 'activities'}/#{month.year}/#{month.month}"
     end
 
     def active_tab(site)
@@ -38,8 +38,12 @@ module MMRToStrava
       redirect "/access" if oauth_access_required?
     end
 
+    def first_day_of_month(date)
+      DateTime.parse(Date.new(date.year, date.month, 1).strftime(midnight_date_format))
+    end
+
     def midnight_date_format
-      "%Y-%m-01T00:00:00Z"
+      "%Y-%m-%dT00:00:00Z"
     end
 
     def display_in_miles(distance_in_meters)

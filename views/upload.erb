@@ -8,7 +8,7 @@
         <i class="fa fa-dashboard"></i>  <a href="/mmr/workouts">MMR / Workouts</a>
       </li>
       <li>
-        <i class="fa fa-calendar"></i> <a href="<%= mmr_workouts_path_for_month(@month) %>"><%= @month.strftime("%B, %Y") %></a>
+        <i class="fa fa-calendar"></i> <a href="<%= workouts_path_for_month(:mmr, @month) %>"><%= @month.strftime("%B, %Y") %></a>
       </li>
       <li class="active">
         <i class="fa fa-cloud-upload"></i> Upload

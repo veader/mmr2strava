@@ -22,14 +22,14 @@
          next_month = @month.next_month
       %>
       <li>
-        <a href="<%= mmr_workouts_path_for_month(prev_month) %>">
+        <a href="<%= workouts_path_for_month(:mmr, prev_month) %>">
           <i class="fa fa-chevron-left"></i>
           <%= prev_month.strftime("%B") %>
         </a>
       </li>
       <li class="disabled"><a href="#"><%= @month.strftime("%B") %></a></li>
       <li>
-        <a href="<%= mmr_workouts_path_for_month(next_month) %>">
+        <a href="<%= workouts_path_for_month(:mmr, next_month) %>">
           <%= next_month.strftime("%B") %>
           <i class="fa fa-chevron-right"></i>
         </a>

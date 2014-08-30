@@ -10,9 +10,19 @@ module MMR
       json_workouts.collect { |json| new(json) }
     end
 
+    def self.all_for_month(client, user_id, date=Date.today)
+      month_beginning = Date.new(date.year, date.month, 1)
+      month_ending = month_beginning.next_month
+      midnight_format = "%Y-%m-%dT00:00:00Z"
+
+      params = { started_after:  month_beginning.strftime(midnight_format),
+                 started_before: month_ending.strftime(midnight_format) }
+      all(client, user_id, params)
+    end
+
     def self.find(client, workout_id)
       json_workout = client.workout(workout_id: workout_id, field_set: "time_series")
-      new(json_workout)
+      new(json_workout) if json_workout
     end
 
     def initialize(json={})
@@ -98,5 +108,4 @@ module MMR
     end
 
   end
-
 end

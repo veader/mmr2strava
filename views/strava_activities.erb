@@ -1,0 +1,92 @@
+<div class="row">
+  <div class="col-lg-12">
+    <h1 class="page-header">
+      Strava Activities
+    </h1>
+    <ol class="breadcrumb">
+      <li>
+        <i class="fa fa-dashboard"></i>  <a href="/mmr/workouts">Strava / Activities</a>
+      </li>
+      <li class="active">
+        <i class="fa fa-calendar"></i> <%= @month.strftime("%B") %>
+      </li>
+    </ol>
+  </div>
+</div>
+<br>
+
+<div class="row">
+  <div class="col-lg-12">
+    <ul class="pagination pagination-sm pagination-month-nav pull-right">
+      <% prev_month = @month.prev_month
+         next_month = @month.next_month
+      %>
+      <li>
+        <a href="<%= workouts_path_for_month(:strava, prev_month) %>">
+          <i class="fa fa-chevron-left"></i>
+          <%= prev_month.strftime("%B") %>
+        </a>
+      </li>
+      <li class="disabled"><a href="#"><%= @month.strftime("%B") %></a></li>
+      <li>
+        <a href="<%= workouts_path_for_month(:strava, next_month) %>">
+          <%= next_month.strftime("%B") %>
+          <i class="fa fa-chevron-right"></i>
+        </a>
+      </li>
+    </ul>
+    <h3 class="month-name">
+      <%= @month.strftime("%B, %Y") %>
+    </h3>
+
+    <% if @activities.empty? %>
+      <p>
+        <strong>Sorry, </strong>
+        no activities were found for <%= @month.strftime("%B") %>.
+      </p>
+    <% else %>
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover table-striped">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Name</th>
+              <th>Date</th>
+              <th>Distance</th>
+              <th>Time</th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @activities.each_with_index do |activity, index| %>
+              <tr>
+                <td class="text-center">
+                  <% if false %>
+                    <a href="/strava/workout/<%= workout.workout_id %>/upload" title="upload to Strava"><i class="fa fa-cloud-upload"></i></a>
+                  <% end %>
+                </td>
+                <td><%= activity.name %></td>
+                <td><%= activity.start_datetime.strftime("%B %e, %l:%M %P") %></td>
+                <td><%= display_in_miles activity.distance %></td>
+                <td><%= display_time activity.elapsed_time %></td>
+                <td class="text-center">
+                  <% if activity.has_heartrate? %>
+                    <i class="fa fa-heart text-danger" title="has heartrate data"></i>
+                  <% else %>
+                    <i class="fa fa-heart-o text-muted" title="no heartrate data"></i>
+                  <% end  %>
+                </td>
+                <td class="text-center">
+                  <% if false %>
+                    <a href="/strava/workout/<%= workout.workout_id %>/download" title="download GPX file"><i class="fa fa-download"></i></a>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% end %>
+
+  </div>
+</div>

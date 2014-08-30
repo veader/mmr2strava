@@ -20,6 +20,7 @@ require "date"
 require "auth_user"
 require "mmr_user"
 require "mmr_workout"
+require "strava_activity"
 
 # helpers ----
 require "app_env"
@@ -135,28 +136,28 @@ class MMRToStravaApplication < Sinatra::Base
   # ---------------------------------------------------------------
   # Strava
   get "/strava/activities" do
+    today = Date.today
+    redirect "/strava/activities/#{today.year}/#{today.month}"
+  end
+
+  get "/strava/activities/:year/:month" do
+    @month = Date.new(params[:year].to_i, params[:month].to_i, 1)
+    @activities = \
+      Strava::Activity.all_for_month(current_user.strava_client, @month)
     erb :strava_activities
   end
 
   # ---------------------------------------------------------------
   # MapMyRun
   get "/mmr/workouts" do
-    # TODO: pagination - pass dates?
-    # TODO: date formatter helper
-    @month = Date.today
-    params = { started_after: @month.strftime(midnight_date_format) }
-    @workouts = MMR::Workout.all(current_user.mmr_client, current_user.mmr_user_id, params)
-    erb :mmr_workouts
+    today = Date.today
+    redirect "/mmr/workouts/#{today.year}/#{today.month}"
   end
 
   get "/mmr/workouts/:year/:month" do
-    month_beginning = Date.new(params[:year].to_i, params[:month].to_i, 1)
-    month_ending = month_beginning.next_month
-
-    params = { started_after:  month_beginning.strftime(midnight_date_format),
-               started_before: month_ending.strftime(midnight_date_format) }
-    @workouts = MMR::Workout.all(current_user.mmr_client, current_user.mmr_user_id, params)
-    @month = month_beginning
+    @month = Date.new(params[:year].to_i, params[:month].to_i, 1)
+    @workouts = \
+      MMR::Workout.all_for_month(current_user.mmr_client, current_user.mmr_user_id, @month)
     erb :mmr_workouts
   end
 
@@ -178,7 +179,7 @@ class MMRToStravaApplication < Sinatra::Base
     @workout = MMR::Workout.find(current_user.mmr_client, params[:workout_id])
 
     # gather all workouts on strava for this same day
-    start_of_day = DateTime.parse(@workout.start_datetime.strftime('%Y-%m-%d 00:00:00'))
+    start_of_day = DateTime.parse(@workout.start_datetime.strftime(midnight_date_format))
     end_of_day = start_of_day.next_day
     @strava_workouts = current_user.strava_client.list_athlete_activities(before: end_of_day, after: start_of_day)
 
