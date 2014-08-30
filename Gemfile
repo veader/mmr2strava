@@ -24,6 +24,7 @@ gem "mmf"
 gem "dotenv"
 gem "nokogiri"
 gem "strava-api-v3"
+gem "httmultiparty"
 
 group :development do
   # database ----

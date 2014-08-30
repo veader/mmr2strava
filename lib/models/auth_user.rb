@@ -53,11 +53,26 @@ class AuthUser < ActiveRecord::Base
     end
   end
 
+  def disconnect_mmr!
+    @_mmr_client = nil
+    @_mmr_user = nil
+    self.mmr_user_id = nil
+    self.mmr_token = nil
+    self.save!
+  end
+
   # ------------------------------------------------------------
   # Strava
   def strava_client
     @_strava_client ||= \
       Strava::Api::V3::Client.new(access_token: self.strava_token)
+  end
+
+  def disconnect_strava!
+    @_strava_client = nil
+    self.strava_user_id = nil
+    self.strava_token = nil
+    self.save!
   end
 
 end

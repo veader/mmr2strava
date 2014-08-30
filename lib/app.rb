@@ -21,6 +21,7 @@ require "auth_user"
 require "mmr_user"
 require "mmr_workout"
 require "strava_activity"
+require "strava_uploader"
 
 # helpers ----
 require "app_env"
@@ -68,7 +69,7 @@ class MMRToStravaApplication < Sinatra::Base
       provider :google_oauth2, ENV["GOOGLE_CLIENT_ID"], ENV["GOOGLE_SECRET"],
                { name: "google", access_type: "online" }
     end
-    provider :strava, ENV["STRAVA_CLIENT_ID"], ENV["STRAVA_CLIENT_SECRET"]
+    provider :strava, ENV["STRAVA_CLIENT_ID"], ENV["STRAVA_CLIENT_SECRET"], scope: "view_private write"
     provider :mapmyfitness, ENV["MMF_API_KEY"], ENV["MMF_API_SECRET"]
   end
   # OmniAuth.config.logger = Logger.new("log/omniauth.log")
@@ -175,31 +176,24 @@ class MMRToStravaApplication < Sinatra::Base
   end
 
   # AJAX calls ------
-  get "/mmr/workout/:workout_id/upload/scan" do
+  get "/mmr/workout/:workout_id/upload/start" do
     @workout = MMR::Workout.find(current_user.mmr_client, params[:workout_id])
 
-    # gather all workouts on strava for this same day
-    start_of_day = DateTime.parse(@workout.start_datetime.strftime(midnight_date_format))
-    end_of_day = start_of_day.next_day
-    @strava_workouts = current_user.strava_client.list_athlete_activities(before: end_of_day, after: start_of_day)
+    uploader = Strava::Uploader.new(current_user.strava_client)
+    response = uploader.upload(@workout)
 
-    # TODO : confirm we didn't already do it...
-    # TODO : scan
+    # TODO: save upload state
+    # TODO: check response
+
+    erb :upload_poll, layout: false
+  end
+
+  get "/mmr/workout/:workout_id/upload/poll" do
+    # TODO : load saved upload state, query, strava and branch response
     # TODO : handle error and render different partial
 
     # next step is to do the upload
     erb :upload_scanning, layout: false
-  end
-
-  get "/mmr/workout/:workout_id/upload/upload" do
-    sleep 10
-    #@workout = MMR::Workout.find(current_user.mmr_client, params[:workout_id])
-    @workout_id = params[:workout_id]
-    # TODO : upload
-    # TODO : handle error and render different partial
-    # TODO : render partial for next step
-
-    erb :upload_uploading, layout: false
   end
 
 end

@@ -1,11 +1,11 @@
 <div class="panel-body">
   <h1 class="text-center">
     <i class="fa fa-spin fa-circle-o-notch"></i>
-    Scanning Strava...
+    Waiting for Strava to Process...
   </h1>
 </div>
 
 <script type="text/javascript" charset="utf-8">
   // next step is to upload...
-  $("#upload-panel").load("/mmr/workout/<%= @workout.workout_id %>/upload/upload");
+  $("#upload-panel").load("/mmr/workout/<%= @workout.workout_id %>/upload/poll");
 </script>
