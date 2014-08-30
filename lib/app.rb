@@ -126,7 +126,7 @@ class MMRToStravaApplication < Sinatra::Base
   end
 
   # ---------------------------------------------------------------
-  get "/user" do
+  get "/account/settings" do
     erb :user
   end
 
@@ -148,6 +148,11 @@ class MMRToStravaApplication < Sinatra::Base
     erb :strava_activities
   end
 
+  get "/strava/disconnect" do
+    current_user.disconnect_strava!
+    redirect "/account/settings"
+  end
+
   # ---------------------------------------------------------------
   # MapMyRun
   get "/mmr/workouts" do
@@ -160,6 +165,11 @@ class MMRToStravaApplication < Sinatra::Base
     @workouts = \
       MMR::Workout.all_for_month(current_user.mmr_client, current_user.mmr_user_id, @month)
     erb :mmr_workouts
+  end
+
+  get "/mmr/disconnect" do
+    current_user.disconnect_mmr!
+    redirect "/account/settings"
   end
 
   get "/mmr/workout/:workout_id/download" do
@@ -180,7 +190,7 @@ class MMRToStravaApplication < Sinatra::Base
     @workout = MMR::Workout.find(current_user.mmr_client, params[:workout_id])
 
     uploader = Strava::Uploader.new(current_user.strava_client)
-    response = uploader.upload(@workout)
+    # response = uploader.upload(@workout)
 
     # TODO: save upload state
     # TODO: check response
@@ -191,6 +201,8 @@ class MMRToStravaApplication < Sinatra::Base
   get "/mmr/workout/:workout_id/upload/poll" do
     # TODO : load saved upload state, query, strava and branch response
     # TODO : handle error and render different partial
+
+    sleep 10
 
     # next step is to do the upload
     erb :upload_scanning, layout: false
