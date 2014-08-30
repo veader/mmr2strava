@@ -2,3 +2,7 @@
 .text-really-muted { color:#AAA; }
 .access-box { min-height:100px; }
 .access-right { border-left: 1px solid #ABC; }
+.pagination-month-nav { margin-top:10px; }
+h1.page-header { margin-top:20px; }
+h3.month-name { color:#428bca; font-weight:300; }
+#upload-panel { background-color:#EEE;min-height:120px; }

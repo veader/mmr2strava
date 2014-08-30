@@ -19,8 +19,30 @@ module MMR
       self.json = json
     end
 
+    # def json_map
+    #   {
+    #     workout_id: "_links/self/[0]/id",
+    #   }
+    # end
+
     def workout_id
-      self.json["_links"]["self"].first["id"]
+      @_workout_id ||= self.json["_links"]["self"].first["id"]
+    end
+
+    def name
+      @_name ||= self.json["name"]
+    end
+
+    def start_datetime
+      @_start_datetime ||= DateTime.parse(self.json["start_datetime"])
+    end
+
+    def distance_total
+      @_distance_total ||= self.json["aggregates"]["distance_total"]
+    end
+
+    def elapsed_time_total
+      @_elapsed_time_total ||= self.json["aggregates"]["elapsed_time_total"]
     end
 
     def has_heartrate_data?

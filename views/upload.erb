@@ -1,0 +1,45 @@
+<div class="row">
+  <div class="col-lg-12">
+    <h1 class="page-header">
+      Upload to Strava
+    </h1>
+    <ol class="breadcrumb">
+      <li>
+        <i class="fa fa-dashboard"></i>  <a href="/workouts">Workouts</a>
+      </li>
+      <li>
+        <i class="fa fa-calendar"></i> <a href="<%= workouts_path_for_month(@month) %>"><%= @month.strftime("%B, %Y") %></a>
+      </li>
+      <li class="active">
+        <i class="fa fa-cloud-upload"></i> Upload
+      </li>
+    </ol>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-5">
+    <h3 class="month-name">
+      <strong>Workout:</strong>
+      <%= @workout.name %>
+    </h3>
+    <h5 class="text-muted">
+      <%= @workout.start_datetime.strftime("%B %e, %Y @ %l:%M %P") %>
+    </h5>
+
+    <h5 id="upload-json-debug"></h5>
+    <div id="upload-panel" class="panel panel-default">
+      <div class="panel-body">
+        <h1 class="text-center">
+          <i class="fa fa-spin fa-circle-o-notch"></i>
+        </h1>
+      </div>
+    </div>
+    <script type="text/javascript" charset="utf-8">
+      document.addEventListener('DOMContentLoaded', function() {
+        $("#upload-panel").load("/workout/<%= @workout.workout_id %>/upload/scan");
+      }, false);
+    </script>
+
+  </div>
+</div>

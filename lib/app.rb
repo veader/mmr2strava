@@ -7,6 +7,8 @@ require "sinatra"
 require "sinatra/activerecord"
 require "sinatra/partial"
 require "sinatra/flash"
+require "sinatra/content_for"
+require "sinatra/json"
 require "omniauth"
 require "omniauth-google-oauth2"
 require "omniauth-strava"
@@ -72,6 +74,8 @@ class MMRToStravaApplication < Sinatra::Base
 
   # ---------------------------------------------------------------
   helpers do
+    include Sinatra::ContentFor
+    include Sinatra::JSON
     include MMRToStrava::Helpers
     include MMRToStrava::MapMyFitness
     include MMRToStrava::Strava
@@ -142,9 +146,6 @@ class MMRToStravaApplication < Sinatra::Base
     month_beginning = Date.new(params[:year].to_i, params[:month].to_i, 1)
     month_ending = month_beginning.next_month
 
-    params = { started_after:  month_beginning.strftime(midnight_date_format),
-               started_before: month_ending.strftime(midnight_date_format) }
-    @workouts = MMR::Workout.all(current_user.mmr_client, current_user.mmr_user_id, params)
     @month = month_beginning
     erb :workouts
   end
@@ -152,12 +153,42 @@ class MMRToStravaApplication < Sinatra::Base
   get "/workout/:workout_id/download" do
     content_type "text/xml"
 
-    @user = current_user.mmr_user
     @workout = MMR::Workout.find(current_user.mmr_client, params[:workout_id])
     @workout.gpx_builder.to_xml
   end
 
   get "/workout/:workout_id/upload" do
+    @workout = MMR::Workout.find(current_user.mmr_client, params[:workout_id])
+    @month = @workout.start_datetime
+    erb :upload
+  end
+
+  # AJAX calls ------
+  get "/workout/:workout_id/upload/scan" do
+    @workout = MMR::Workout.find(current_user.mmr_client, params[:workout_id])
+
+    # gather all workouts on strava for this same day
+    start_of_day = DateTime.parse(@workout.start_datetime.strftime('%Y-%m-%d 00:00:00'))
+    end_of_day = start_of_day.next_day
+    @strava_workouts = current_user.strava_client.list_athlete_activities(before: end_of_day, after: start_of_day)
+
+    # TODO : confirm we didn't already do it...
+    # TODO : scan
+    # TODO : handle error and render different partial
+
+    # next step is to do the upload
+    erb :upload_scanning, layout: false
+  end
+
+  get "/workout/:workout_id/upload/upload" do
+    sleep 10
+    #@workout = MMR::Workout.find(current_user.mmr_client, params[:workout_id])
+    @workout_id = params[:workout_id]
+    # TODO : upload
+    # TODO : handle error and render different partial
+    # TODO : render partial for next step
+
+    erb :upload_uploading, layout: false
   end
 
 end

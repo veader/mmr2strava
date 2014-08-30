@@ -9,6 +9,7 @@ gem "rack"
 gem "sinatra"
 gem "sinatra-flash"
 gem "sinatra-partial"
+gem "sinatra-contrib"
 gem "json"
 gem "sinatra-activerecord"
 

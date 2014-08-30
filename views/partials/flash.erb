@@ -1,0 +1,10 @@
+<% if !flash.empty? %>
+  <% %i[error warning notice info success].each do |level| %>
+    <% if flash[level] %>
+      <div class="alert <%= class_for_flash(level) %>" role="alert">
+        <strong><%= level.to_s.capitalize %></strong>
+        <%= flash[level] %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>
