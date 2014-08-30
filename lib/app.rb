@@ -93,7 +93,7 @@ class MMRToStravaApplication < Sinatra::Base
 
   # ---------------------------------------------------------------
   get "/" do
-    redirect "/workouts"
+    redirect "/mmr/workouts"
   end
 
   get "/login" do
@@ -133,38 +133,48 @@ class MMRToStravaApplication < Sinatra::Base
   end
 
   # ---------------------------------------------------------------
-  get "/workouts" do
+  # Strava
+  get "/strava/activities" do
+    erb :strava_activities
+  end
+
+  # ---------------------------------------------------------------
+  # MapMyRun
+  get "/mmr/workouts" do
     # TODO: pagination - pass dates?
     # TODO: date formatter helper
     @month = Date.today
     params = { started_after: @month.strftime(midnight_date_format) }
     @workouts = MMR::Workout.all(current_user.mmr_client, current_user.mmr_user_id, params)
-    erb :workouts
+    erb :mmr_workouts
   end
 
-  get "/workouts/:year/:month" do
+  get "/mmr/workouts/:year/:month" do
     month_beginning = Date.new(params[:year].to_i, params[:month].to_i, 1)
     month_ending = month_beginning.next_month
 
+    params = { started_after:  month_beginning.strftime(midnight_date_format),
+               started_before: month_ending.strftime(midnight_date_format) }
+    @workouts = MMR::Workout.all(current_user.mmr_client, current_user.mmr_user_id, params)
     @month = month_beginning
-    erb :workouts
+    erb :mmr_workouts
   end
 
-  get "/workout/:workout_id/download" do
+  get "/mmr/workout/:workout_id/download" do
     content_type "text/xml"
 
     @workout = MMR::Workout.find(current_user.mmr_client, params[:workout_id])
     @workout.gpx_builder.to_xml
   end
 
-  get "/workout/:workout_id/upload" do
+  get "/mmr/workout/:workout_id/upload" do
     @workout = MMR::Workout.find(current_user.mmr_client, params[:workout_id])
     @month = @workout.start_datetime
     erb :upload
   end
 
   # AJAX calls ------
-  get "/workout/:workout_id/upload/scan" do
+  get "/mmr/workout/:workout_id/upload/scan" do
     @workout = MMR::Workout.find(current_user.mmr_client, params[:workout_id])
 
     # gather all workouts on strava for this same day
@@ -180,7 +190,7 @@ class MMRToStravaApplication < Sinatra::Base
     erb :upload_scanning, layout: false
   end
 
-  get "/workout/:workout_id/upload/upload" do
+  get "/mmr/workout/:workout_id/upload/upload" do
     sleep 10
     #@workout = MMR::Workout.find(current_user.mmr_client, params[:workout_id])
     @workout_id = params[:workout_id]

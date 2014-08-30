@@ -10,8 +10,19 @@ module MMRToStrava
 
     # ----------------------------------------------------------------------
     # PATH HELPERS
-    def workouts_path_for_month(month)
-      "/workouts/#{month.year}/#{month.month}"
+    def mmr_workouts_path_for_month(month)
+      "/mmr/workouts/#{month.year}/#{month.month}"
+    end
+
+    def active_tab(site)
+      case site.to_sym
+      when :mmr
+        request.path_info.match(%r{^/mmr/})
+      when :strava
+        request.path_info.match(%r{^/strava/})
+      else
+        false
+      end
     end
 
     # ----------------------------------------------------------------------
