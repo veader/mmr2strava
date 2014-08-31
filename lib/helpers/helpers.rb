@@ -88,6 +88,7 @@ module MMRToStrava
       elsif upload_response.processing?
         @redirect = false
         @url = workout_upload_path("poll")
+        sleep 5
       elsif upload_response.created?
         @redirect = true
         @url = workout_upload_path("complete")

@@ -14,7 +14,9 @@ module Strava
       self.strava_client = client
     end
 
-    def upload(mmr_workout)
+    def upload(mmr_workout=nil)
+      return nil if mmr_workout.nil?
+
       response = self.class.post("/uploads",
         query: {
           name: mmr_workout.better_name,

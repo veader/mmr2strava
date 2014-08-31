@@ -62,7 +62,9 @@
             <% @workouts.each_with_index do |workout, index| %>
               <tr>
                 <td class="text-center">
-                  <a href="/mmr/workout/<%= workout.workout_id %>/upload" title="upload to Strava"><i class="fa fa-cloud-upload"></i></a>
+                  <a href="/mmr/workout/<%= workout.workout_id %>/upload" title="upload to Strava" <%= 'class="uploaded"' if @log_hash[workout.workout_id] %>>
+                    <i class="fa fa-cloud-upload"></i>
+                  </a>
                 </td>
                 <td><%= workout.name %></td>
                 <td><%= workout.start_datetime.to_time.strftime("%B %e, %l:%M %P") %></td>

@@ -138,7 +138,7 @@ class MMRToStravaApplication < Sinatra::Base
   # Strava
   get "/strava/activities" do
     today = Date.today
-    redirect "/strava/activities/#{today.year}/#{today.month}"
+    redirect workouts_path_for_month(:strava, today)
   end
 
   get "/strava/activities/:year/:month" do
@@ -157,13 +157,19 @@ class MMRToStravaApplication < Sinatra::Base
   # MapMyRun
   get "/mmr/workouts" do
     today = Date.today
-    redirect "/mmr/workouts/#{today.year}/#{today.month}"
+    redirect workouts_path_for_month(:mmr, today)
   end
 
   get "/mmr/workouts/:year/:month" do
     @month = Date.new(params[:year].to_i, params[:month].to_i, 1)
     @workouts = \
       MMR::Workout.all_for_month(current_user.mmr_client, current_user.mmr_user_id, @month)
+
+    workout_ids = @workouts.collect(&:workout_id)
+    logs = UploadLog.where(mmr_workout_id: workout_ids).all
+    @log_hash = {}
+    logs.each { |log| @log_hash[log.mmr_workout_id] = log }
+
     erb :mmr_workouts
   end
 
@@ -208,7 +214,7 @@ class MMRToStravaApplication < Sinatra::Base
 
   get "/mmr/workout/:workout_id/upload/poll" do
     uploader = Strava::Uploader.new(current_user.strava_client)
-    upload_response = uploader.upload(@workout)
+    upload_response = uploader.upload_status(current_log)
 
     branch_on_upload_response(upload_response)
   end
