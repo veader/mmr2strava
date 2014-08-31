@@ -47,7 +47,7 @@ module Strava
 
     def processing?
       # "Your activity is still being processed."
-      !error? && activity_id.blank? && status.match(/still being processed/)
+      !error? && status.match(/still being processed/)
     end
 
     def created?
