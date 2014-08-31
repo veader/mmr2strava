@@ -22,7 +22,7 @@ task :default => [:test]
 namespace :mmr2strava do
   desc "Upload workouts for a given month"
   task :upload_month do
-    @month = Date.new(ENV["YEAR"], ENV["MONTH"], 1)
+    @month = Date.new(ENV["YEAR"].to_i, ENV["MONTH"].to_i, 1)
     @workouts = \
       MMR::Workout.all_for_month(current_user.mmr_client, current_user.mmr_user_id, @month)
     @uploader = Strava::Uploader.new(current_user.strava_client)
