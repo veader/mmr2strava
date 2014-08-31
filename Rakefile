@@ -15,6 +15,7 @@ require "bundler/setup"
 require "rake/testtask"
 require "app"
 require "sinatra/activerecord/rake"
+require "pp"
 
 task :default => [:test]
 
@@ -57,11 +58,13 @@ namespace :mmr2strava do
             break
           else
             puts "\tUnknown response status?"
+            pp response
             break
           end
         end # -- while
       rescue Exception => ex
         puts ex.message
+        pp ex
       end
     end # -- workouts.each
   end
