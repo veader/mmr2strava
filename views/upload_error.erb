@@ -1,0 +1,27 @@
+<div class="row">
+  <div class="col-lg-12">
+    <h1 class="page-header">
+      Upload to Strava
+    </h1>
+    <ol class="breadcrumb">
+      <li>
+        <i class="fa fa-dashboard"></i>  <a href="/mmr/workouts">MMR / Workouts</a>
+      </li>
+      <li>
+        <i class="fa fa-calendar"></i> <a href="<%= workouts_path_for_month(:mmr, @month) %>"><%= @month.strftime("%B, %Y") %></a>
+      </li>
+      <li class="active">
+        <i class="fa fa-cloud-upload"></i> Upload / Error
+      </li>
+    </ol>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-5">
+    <div class="alert alert-danger" role="alert">
+      <strong>Error!</strong>
+      An error was encountered while attempting to upload to Strava.
+    </div>
+  </div>
+</div>

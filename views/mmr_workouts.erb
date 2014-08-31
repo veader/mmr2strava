@@ -65,7 +65,7 @@
                   <a href="/mmr/workout/<%= workout.workout_id %>/upload" title="upload to Strava"><i class="fa fa-cloud-upload"></i></a>
                 </td>
                 <td><%= workout.name %></td>
-                <td><%= workout.start_datetime.strftime("%B %e, %l:%M %P") %></td>
+                <td><%= workout.start_datetime.to_time.strftime("%B %e, %l:%M %P") %></td>
                 <td><%= display_in_miles workout.distance_total %></td>
                 <td><%= display_time workout.elapsed_time_total %></td>
                 <td class="text-center">

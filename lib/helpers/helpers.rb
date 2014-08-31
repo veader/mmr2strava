@@ -8,10 +8,19 @@ module MMRToStrava
         session[:user_id] ? AuthUser.where(id: session[:user_id].to_i).first : nil
     end
 
+    def current_log
+      @_current_log ||= \
+        UploadLog.where(mmr_workout_id: params[:workout_id]).first
+    end
+
     # ----------------------------------------------------------------------
     # PATH HELPERS
     def workouts_path_for_month(site, month)
       "/#{site}/#{site == :mmr ? 'workouts' : 'activities'}/#{month.year}/#{month.month}"
+    end
+
+    def workout_upload_path(state="poll")
+      "/mmr/workout/#{params[:workout_id]}/upload/#{state}"
     end
 
     def active_tab(site)
@@ -66,6 +75,24 @@ module MMRToStrava
         info:    "alert-info",
         success: "alert-success",
       }[level]
+    end
+
+    def branch_on_upload_response(upload_response)
+      if upload_response.error?
+        flash[:error] = upload_response.error
+        @redirect = true
+        @url = workout_upload_path("error")
+      elsif upload_response.duplicate?
+        @redirect = true
+        @url = workout_upload_path("duplicate")
+      elsif upload_response.processing?
+        @redirect = false
+        @url = workout_upload_path("poll")
+      elsif upload_response.created?
+        @redirect = true
+        @url = workout_upload_path("complete")
+      end
+      erb :upload_poll, layout: false
     end
 
   end

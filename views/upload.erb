@@ -38,7 +38,7 @@
     </div>
     <script type="text/javascript" charset="utf-8">
       document.addEventListener('DOMContentLoaded', function() {
-        $("#upload-panel").load("/mmr/workout/<%= @workout.workout_id %>/upload/start");
+        $("#upload-panel").load("<%= workout_upload_path('start') %>");
       }, false);
     </script>
 

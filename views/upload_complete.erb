@@ -1,0 +1,28 @@
+<div class="row">
+  <div class="col-lg-12">
+    <h1 class="page-header">
+      Upload to Strava
+    </h1>
+    <ol class="breadcrumb">
+      <li>
+        <i class="fa fa-dashboard"></i>  <a href="/mmr/workouts">MMR / Workouts</a>
+      </li>
+      <li>
+        <i class="fa fa-calendar"></i> <a href="<%= workouts_path_for_month(:mmr, @month) %>"><%= @month.strftime("%B, %Y") %></a>
+      </li>
+      <li class="active">
+        <i class="fa fa-cloud-upload"></i> Upload / Complete
+      </li>
+    </ol>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-5">
+    <div class="alert alert-success" role="alert">
+      <strong>Success!</strong>
+      The workout was successfully uploaded to Strava.
+      <a href="http://www.strava.com/activities/<%= current_log.strava_activity_id %>">View it here</a>.
+    </div>
+  </div>
+</div>

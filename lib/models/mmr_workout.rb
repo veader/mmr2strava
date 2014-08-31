@@ -43,6 +43,15 @@ module MMR
       @_name ||= self.json["name"]
     end
 
+    def better_name
+      @_better_name ||= \
+        if self.name == "Run"
+          "Run on #{start_datetime.strftime('%m/%d/%Y')}"
+        else
+          self.name
+        end
+    end
+
     def start_datetime
       @_start_datetime ||= DateTime.parse(self.json["start_datetime"])
     end

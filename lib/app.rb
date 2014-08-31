@@ -179,7 +179,18 @@ class MMRToStravaApplication < Sinatra::Base
     @workout.gpx_builder.to_xml
   end
 
+  # ---------------------------------------------------------------
+  # Upload
   get "/mmr/workout/:workout_id/upload" do
+    if current_log && current_log.complete?
+      if params[:force] == "1"
+        current_log.destroy!
+        redirect "/mmr/workout/#{params[:workout_id]}/upload"
+      else
+        redirect workout_upload_path("duplicate")
+      end
+    end
+
     @workout = MMR::Workout.find(current_user.mmr_client, params[:workout_id])
     @month = @workout.start_datetime
     erb :upload
@@ -190,22 +201,32 @@ class MMRToStravaApplication < Sinatra::Base
     @workout = MMR::Workout.find(current_user.mmr_client, params[:workout_id])
 
     uploader = Strava::Uploader.new(current_user.strava_client)
-    # response = uploader.upload(@workout)
+    upload_response = uploader.upload(@workout)
 
-    # TODO: save upload state
-    # TODO: check response
-
-    erb :upload_poll, layout: false
+    branch_on_upload_response(upload_response)
   end
 
   get "/mmr/workout/:workout_id/upload/poll" do
-    # TODO : load saved upload state, query, strava and branch response
-    # TODO : handle error and render different partial
+    uploader = Strava::Uploader.new(current_user.strava_client)
+    upload_response = uploader.upload(@workout)
 
-    sleep 10
+    branch_on_upload_response(upload_response)
+  end
 
-    # next step is to do the upload
-    erb :upload_scanning, layout: false
+  get "/mmr/workout/:workout_id/upload/:upload_state" do
+    @workout = MMR::Workout.find(current_user.mmr_client, params[:workout_id])
+    @month = @workout.start_datetime
+
+    case params[:upload_state]
+    when "error"
+      erb :upload_error
+    when "duplicate"
+      erb :upload_duplicate
+    when "complete"
+      erb :upload_complete
+    else
+      redirect "/"
+    end
   end
 
 end

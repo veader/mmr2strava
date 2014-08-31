@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140824030538) do
+ActiveRecord::Schema.define(version: 20140830212802) do
 
   create_table "auth_users", force: true do |t|
     t.string   "email"
@@ -27,5 +27,17 @@ ActiveRecord::Schema.define(version: 20140824030538) do
   end
 
   add_index "auth_users", ["email"], name: "index_auth_users_on_email"
+
+  create_table "upload_logs", force: true do |t|
+    t.string   "strava_upload_id"
+    t.string   "mmr_workout_id"
+    t.string   "strava_activity_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "upload_logs", ["mmr_workout_id"], name: "index_upload_logs_on_mmr_workout_id"
+  add_index "upload_logs", ["strava_activity_id"], name: "index_upload_logs_on_strava_activity_id"
+  add_index "upload_logs", ["strava_upload_id"], name: "index_upload_logs_on_strava_upload_id"
 
 end
