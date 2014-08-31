@@ -28,17 +28,19 @@ namespace :mmr2strava do
       MMR::Workout.all_for_month(@user.mmr_client, @user.mmr_user_id, @month)
     @uploader = Strava::Uploader.new(@user.strava_client)
 
-    @workouts.each do |workout|
+    @workouts.each do |workout_meta|
       begin
+        # load the full workout object...
+        workout = MMR::Workout.find(@user.mmr_client, workout_meta.workout_id)
         puts "Workout: #{workout.workout_id}"
+
         # check for previous log
         log = UploadLog.where(mmr_workout_id: workout.workout_id).first
         next if log && log.complete?
 
-        uploading = true
         response = @uploader.upload(workout)
 
-        while uploading do
+        while true do
           if response.error?
             puts "\tError uploading workout: #{workout.workout_id}"
             break
@@ -52,7 +54,7 @@ namespace :mmr2strava do
             response = @uploader.upload_status(log)
           elsif response.created?
             puts "\tSuccess!"
-            uploading = false
+            break
           else
             puts "\tUnknown response status?"
             break
