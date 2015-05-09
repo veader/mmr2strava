@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(version: 20140830212802) do
     t.datetime "updated_at"
   end
 
-  add_index "auth_users", ["email"], name: "index_auth_users_on_email"
+  add_index "auth_users", ["email"], name: "index_auth_users_on_email", using: :btree
 
   create_table "upload_logs", force: true do |t|
     t.string   "strava_upload_id"
@@ -36,8 +36,8 @@ ActiveRecord::Schema.define(version: 20140830212802) do
     t.datetime "updated_at"
   end
 
-  add_index "upload_logs", ["mmr_workout_id"], name: "index_upload_logs_on_mmr_workout_id"
-  add_index "upload_logs", ["strava_activity_id"], name: "index_upload_logs_on_strava_activity_id"
-  add_index "upload_logs", ["strava_upload_id"], name: "index_upload_logs_on_strava_upload_id"
+  add_index "upload_logs", ["mmr_workout_id"], name: "index_upload_logs_on_mmr_workout_id", using: :btree
+  add_index "upload_logs", ["strava_activity_id"], name: "index_upload_logs_on_strava_activity_id", using: :btree
+  add_index "upload_logs", ["strava_upload_id"], name: "index_upload_logs_on_strava_upload_id", using: :btree
 
 end

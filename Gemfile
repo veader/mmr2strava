@@ -1,6 +1,6 @@
 # A sample Gemfile
 source "https://rubygems.org"
-ruby "2.0.0"
+# ruby "2.0.0"
 
 gem "rake"
 
@@ -28,8 +28,9 @@ gem "httmultiparty"
 
 group :development do
   # database ----
-  gem "sqlite3" # technically only needed for dev
-  # gem "mysql2"
+  # gem "sqlite3" # technically only needed for dev
+  gem "mysql2"
+  # gem "pg"
 
   # dev/debugging ----
   gem "tux"
