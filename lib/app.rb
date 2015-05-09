@@ -162,8 +162,19 @@ class MMRToStravaApplication < Sinatra::Base
 
   get "/mmr/workouts/:year/:month" do
     @month = Date.new(params[:year].to_i, params[:month].to_i, 1)
-    @workouts = \
-      MMR::Workout.all_for_month(current_user.mmr_client, current_user.mmr_user_id, @month)
+    begin
+      @workouts = \
+        MMR::Workout.all_for_month(current_user.mmr_client, current_user.mmr_user_id, @month)
+    rescue => ex
+      # capture expire oauth, clear token and redirect
+      if ex.to_s.match("OAUTH2:ACCESSTOKEN_EXPIRED")
+        pp "MMR OAUTH ERROR"
+        current_user.disconnect_mmr!
+        redirect "/access"
+      else
+        raise ex
+      end
+    end
 
     workout_ids = @workouts.collect(&:workout_id)
     logs = UploadLog.where(mmr_workout_id: workout_ids).all
