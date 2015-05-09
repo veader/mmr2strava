@@ -3,8 +3,7 @@ require "strava/api/v3"
 
 class AuthUser < ActiveRecord::Base
   validates_presence_of :email
-  # validates_format_of :email, with: /[shawn@veader\.org|veader@gmail\.com]/, message: "is incorrect. You're not the right person!"
-  validates :email, inclusion: { in: %w(shawn@veader.org veader@gmail.com) }
+  validates :email, inclusion: { in: ENV["ALLOWED_EMAILS"].to_s.split(",") }
 
   def self.find_by_omniauth(auth_hash)
     where(email: auth_hash['info']['email']).first
