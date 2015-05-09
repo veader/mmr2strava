@@ -69,7 +69,7 @@ class MMRToStravaApplication < Sinatra::Base
       provider :google_oauth2, ENV["GOOGLE_CLIENT_ID"], ENV["GOOGLE_SECRET"],
                { name: "google", access_type: "online" }
     end
-    provider :strava, ENV["STRAVA_CLIENT_ID"], ENV["STRAVA_CLIENT_SECRET"], scope: "view_private write"
+    provider :strava, ENV["STRAVA_CLIENT_ID"], ENV["STRAVA_CLIENT_SECRET"], scope: "view_private,write"
     provider :mapmyfitness, ENV["MMF_API_KEY"], ENV["MMF_API_SECRET"]
   end
   # OmniAuth.config.logger = Logger.new("log/omniauth.log")
